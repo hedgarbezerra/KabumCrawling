@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KabumCrawling.Domain.Models
 {
-    public class ProdutoDetalhado
+    public class ProdutoDetalhado : BaseProduto
     {
     }
 }

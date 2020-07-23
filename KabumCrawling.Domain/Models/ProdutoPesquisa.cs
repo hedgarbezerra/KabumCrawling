@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace KabumCrawling.Domain.Models
 {
-    public class Produto : BaseProduto
+    public class ProdutoPesquisa
     {
+        public string produto { get; set; }
+        public decimal? valor_produto { get; set; }
+
     }
 }

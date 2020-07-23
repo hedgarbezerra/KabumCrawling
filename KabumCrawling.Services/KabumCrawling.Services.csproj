@@ -49,11 +49,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crawler\BaseCrawler.cs" />
-    <Compile Include="Crawler\CrawlerService.cs" />
+    <Compile Include="Crawler\KabumCrawler.cs" />
+    <Compile Include="Crawler\PichauCrawler.cs" />
+    <Compile Include="Crawler\TerabyteCrawler.cs" />
     <Compile Include="Email\EmailSender.cs" />
+    <Compile Include="Notification\EmailNotification.cs" />
+    <Compile Include="Interfaces\INotification.cs" />
+    <Compile Include="Notification\SMSNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\KabumCrawling.Domain\KabumCrawling.Domain.csproj">
+      <Project>{583D365F-4936-4C1F-B3EF-7AC9EA947906}</Project>
+      <Name>KabumCrawling.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

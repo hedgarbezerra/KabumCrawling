@@ -156,7 +156,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\ProdutosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -245,6 +245,16 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KabumCrawling.Domain\KabumCrawling.Domain.csproj">
+      <Project>{583D365F-4936-4C1F-B3EF-7AC9EA947906}</Project>
+      <Name>KabumCrawling.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KabumCrawling.Services\KabumCrawling.Services.csproj">
+      <Project>{A95CB4E2-5B70-4331-993A-D10928B57E8D}</Project>
+      <Name>KabumCrawling.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

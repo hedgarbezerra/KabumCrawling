@@ -10,6 +10,25 @@ namespace KabumCrawling.Services.Crawler
 {
     public abstract class BaseCrawler
     {
+        protected string CorrigeQueryString(string termoBusca = "")
+        {
+            if (String.IsNullOrEmpty(termoBusca))
+                throw new Exception("Houve um erro ao converter o termo de busca, por favor, preenchá-o.");
+
+            return string.Join("+", termoBusca.Replace("  ", " ").Split(' '));
+
+        }
+        public string ExtrairQueryString(List<string> removerItens = null)
+        {
+            removerItens = removerItens ?? new List<string>();
+
+            return string.Join("+", this.GetType()
+                                .GetProperties()
+                               .Where(x => x.CanRead)
+                               .Where(p => p.GetValue(this, null) != null && !string.IsNullOrEmpty(p.GetValue(this, null).ToString())
+                                    && p.GetValue(this, null).ToString() != "0" && !removerItens.Exists(z => z == p.Name))
+                               .Select(p => $"{Uri.EscapeDataString(p.Name)}={Uri.EscapeDataString(p.GetValue(this).ToString())}"));
+        }
         protected RetornoRequesicao FazerRequest(string endereco, MetodoRequisicao metodo = MetodoRequisicao.GET, List<KeyValuePair<string, string>> formulario = null)
         {
             try
