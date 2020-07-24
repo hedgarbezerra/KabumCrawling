@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace KabumCrawling.API.Controllers
 {
-    [RoutePrefix("Produtos")]
+    [RoutePrefix("api/Produtos")]
     public class ProdutosController : ApiController
     {
         [HttpPost]
@@ -19,28 +19,30 @@ namespace KabumCrawling.API.Controllers
             try
             {
                 List<Produto> produtos = new List<Produto>();
-                if(produtos.Count() > 0)
-                    return Content(HttpStatusCode.Found, produtos);
-                else
-                    return Content(HttpStatusCode.NotFound, produtos);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
+                PichauCrawler crawlerPichau = new PichauCrawler();
+                TerabyteCrawler terabyteCrawler = new TerabyteCrawler();
 
-        [HttpPost]
-        [Route("PesquisarProduto")]
-        public IHttpActionResult ProdutoUnico([FromBody] ProdutoPesquisa pesquisa)
-        {
-            try
-            {
-                ProdutoDetalhado produtos = new ProdutoDetalhado();
-                if (produtos != null)
+                produtos.AddRange(crawlerPichau.PesquisarProduto(pesquisa));
+                produtos.AddRange(terabyteCrawler.PesquisarProduto(pesquisa));
+                if (produtos.Count() > 0)
+                {
+                    IQueryable<Produto> produtosConsulta = produtos.AsQueryable();
+
+                    if (pesquisa.valor_produto_max.HasValue && pesquisa.valor_produto_max > 0)
+                        produtosConsulta = produtosConsulta.Where(x => x.Preco <= pesquisa.valor_produto_max);
+
+                    if (pesquisa.valor_produto_min.HasValue && pesquisa.valor_produto_min > 0)
+                        produtosConsulta = produtosConsulta.Where(x => x.Preco >= pesquisa.valor_produto_min);
+
+                    if (pesquisa.qtd_itens.HasValue)
+                        produtosConsulta = produtosConsulta.Take(pesquisa.qtd_itens >= 1 ? (int)pesquisa.qtd_itens : produtosConsulta.Count());
+
+                    produtos = produtosConsulta.OrderBy(p => p.Preco).ToList();
+
                     return Content(HttpStatusCode.Found, produtos);
+                }
                 else
-                    return Content(HttpStatusCode.NotFound, produtos);
+                    return Content(HttpStatusCode.NoContent, produtos);
             }
             catch (Exception ex)
             {
@@ -54,11 +56,29 @@ namespace KabumCrawling.API.Controllers
         {
             try
             {
-                KabumCrawler crawler = new KabumCrawler();
-
+                PichauCrawler crawlerPichau = new PichauCrawler();
+                TerabyteCrawler crawlerTera = new TerabyteCrawler();
                 List<Produto> produtos = new List<Produto>();
+                produtos.AddRange(crawlerPichau.GetGTX1660List());
+                produtos.AddRange(crawlerTera.GetGTX1660List());
+
                 if (produtos.Count() > 0)
+                {
+                    IQueryable<Produto> produtosConsulta = produtos.AsQueryable();
+
+                    if (pesquisa.valor_produto_max.HasValue && pesquisa.valor_produto_max > 0)
+                        produtosConsulta = produtosConsulta.Where(x=> x.Preco <= pesquisa.valor_produto_max);
+
+                    if (pesquisa.valor_produto_min.HasValue && pesquisa.valor_produto_min > 0)
+                        produtosConsulta = produtosConsulta.Where(x => x.Preco >= pesquisa.valor_produto_min);
+
+                    if (pesquisa.qtd_itens.HasValue)
+                        produtosConsulta = produtosConsulta.Take(pesquisa.qtd_itens >= 1 ? (int)pesquisa.qtd_itens : produtosConsulta.Count());
+
+                    produtos = produtosConsulta.OrderBy(p => p.Preco).ToList();
+
                     return Content(HttpStatusCode.Found, produtos);
+                }
                 else
                     return Content(HttpStatusCode.NotFound, produtos);
             }

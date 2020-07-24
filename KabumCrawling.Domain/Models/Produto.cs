@@ -8,5 +8,6 @@ namespace KabumCrawling.Domain.Models
 {
     public class Produto : BaseProduto
     {
+        public string Loja { get; set; }
     }
 }
