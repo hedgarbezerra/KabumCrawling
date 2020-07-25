@@ -1,5 +1,6 @@
 ﻿using KabumCrawling.Domain.Models;
 using KabumCrawling.Services.Crawler;
+using KabumCrawling.Services.Notification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace KabumCrawling.API.Controllers
                     IQueryable<Produto> produtosConsulta = produtos.AsQueryable();
 
                     if (pesquisa.valor_produto_max.HasValue && pesquisa.valor_produto_max > 0)
-                        produtosConsulta = produtosConsulta.Where(x=> x.Preco <= pesquisa.valor_produto_max);
+                        produtosConsulta = produtosConsulta.Where(x => x.Preco <= pesquisa.valor_produto_max);
 
                     if (pesquisa.valor_produto_min.HasValue && pesquisa.valor_produto_min > 0)
                         produtosConsulta = produtosConsulta.Where(x => x.Preco >= pesquisa.valor_produto_min);
