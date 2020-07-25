@@ -1,4 +1,5 @@
 ﻿using KabumCrawling.Domain.Models;
+using KabumCrawling.Repository.Repositories;
 using KabumCrawling.Services.Crawler;
 using KabumCrawling.Services.Notification;
 using System;
@@ -88,5 +89,42 @@ namespace KabumCrawling.API.Controllers
                 return InternalServerError(ex);
             }
         }
+
+        [HttpPost]
+        [Route("TesteCadastro")]
+        public IHttpActionResult Cadastro([FromBody] NotificacaoProduto notificacaoProduto)
+        {
+            try
+            {
+                NotificacaoRepository repo = new NotificacaoRepository();
+                var objCtx = repo.Inserir(notificacaoProduto);
+                repo.Savechanges();
+                return Ok(objCtx);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+        [HttpGet]
+        [Route("TesteListar")]
+        public IHttpActionResult Listar(string q = "",  int ? qtd_items = null, int? pagina = null)
+        {
+            try
+            {
+                NotificacaoRepository repo = new NotificacaoRepository();
+                var listaProdutos = repo.Listar(); //repo.Listar(x=> x.NomeDestinario.Contains(q)|| x.NomeProduto.Contains(q), x=> x.DtCadastro, qtd_items, pagina, true);
+                return Ok(new { 
+                    data = listaProdutos,
+                    message = listaProdutos.Count() > 0 ? "Encontramos os seguintes produtos registrados." : "Oops, não encontramos o que procurava."
+                });
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+
+        }
+
     }
 }

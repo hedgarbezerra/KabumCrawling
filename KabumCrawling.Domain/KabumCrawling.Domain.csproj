@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Models\BaseProduto.cs" />
     <Compile Include="Models\Destinario.cs" />
+    <Compile Include="Models\NotificacaoProduto.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\ProdutoDetalhado.cs" />
     <Compile Include="Models\ProdutoPesquisa.cs" />

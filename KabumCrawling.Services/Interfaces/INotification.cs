@@ -11,6 +11,6 @@ namespace KabumCrawling.Services.Notification
     public interface INotification
     {
         void Notificar(List<Produto> produtos, Destinario destinario);
-        void Notificar<T>(List<Produto> produtos, List<Destinario> destinario);
+        void Notificar(List<Produto> produtos, List<Destinario> destinario);
     }
 }

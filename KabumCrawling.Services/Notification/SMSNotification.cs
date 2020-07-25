@@ -9,12 +9,12 @@ namespace KabumCrawling.Services.Notification
 {
     public class SMSNotification : NotificationBase
     {
-        public override void Notificar(string mensagem, Destinario destinario)
+        public override void Notificar(List<Produto> produtos, Destinario destinario)
         {
             throw new NotImplementedException();
         }
 
-        public override void Notificar<T>(string mensagem, List<Destinario> destinario)
+        public override void Notificar(List<Produto> produtos, List<Destinario> destinario)
         {
             throw new NotImplementedException();
         }
