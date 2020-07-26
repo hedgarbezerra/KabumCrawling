@@ -33,13 +33,14 @@
             // 
             // serviceProcessInstaller
             // 
+            this.serviceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalService;
             this.serviceProcessInstaller.Password = null;
             this.serviceProcessInstaller.Username = null;
             // 
             // serviceInstaller
             // 
-            this.serviceInstaller.DisplayName = "Crawler";
-            this.serviceInstaller.ServiceName = "Service1";
+            this.serviceInstaller.DisplayName = "CrawlerService2";
+            this.serviceInstaller.ServiceName = "CrawlerService";
             // 
             // ProjectInstaller
             // 

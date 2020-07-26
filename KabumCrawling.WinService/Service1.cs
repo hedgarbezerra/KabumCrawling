@@ -23,7 +23,7 @@ namespace KabumCrawling.WinService
                    () => ConsumingService.EnviarEmailPrecos()
                );
 
-            schedule.ToRunEvery(30).Minutes();
+            schedule.ToRunEvery(5).Minutes();
         }
 
         protected override void OnStop()
