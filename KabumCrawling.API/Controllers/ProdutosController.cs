@@ -15,6 +15,11 @@ namespace KabumCrawling.API.Controllers
     [RoutePrefix("api/Produtos")]
     public class ProdutosController : ApiController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pesquisa"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("PesquisarPrecosProdutos")]
         public IHttpActionResult ListaProdutos([FromBody] DTOProdutoPesquisa pesquisa)

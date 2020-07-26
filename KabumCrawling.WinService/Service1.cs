@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentScheduler;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,13 +17,18 @@ namespace KabumCrawling.WinService
         {
             InitializeComponent();
         }
-
         protected override void OnStart(string[] args)
         {
+            var schedule = new Schedule(
+                   () => ConsumingService.EnviarEmailPrecos()
+               );
+
+            schedule.ToRunEvery(30).Minutes();
         }
 
         protected override void OnStop()
         {
         }
+
     }
 }

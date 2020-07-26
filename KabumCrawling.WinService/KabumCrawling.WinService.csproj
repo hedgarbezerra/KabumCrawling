@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8DE195C7-CB53-4712-82C7-DFF0C603FCAC}</ProjectGuid>
+    <ProjectGuid>{C128AC8B-E8F4-40E4-9783-D9FCED61CC5E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>KabumCrawling.WinService</RootNamespace>
     <AssemblyName>KabumCrawling.WinService</AssemblyName>
@@ -37,7 +37,9 @@
       <HintPath>..\packages\FluentScheduler.5.4.0\lib\netstandard2.0\FluentScheduler.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsumingService.cs" />
+    <Compile Include="ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProjectInstaller.Designer.cs">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -59,6 +68,25 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KabumCrawling.Domain\KabumCrawling.Domain.csproj">
+      <Project>{583d365f-4936-4c1f-b3ef-7ac9ea947906}</Project>
+      <Name>KabumCrawling.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KabumCrawling.Repository\KabumCrawling.Repository.csproj">
+      <Project>{872f16ac-4c71-4c51-b085-e7ecda76d8f5}</Project>
+      <Name>KabumCrawling.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KabumCrawling.Services\KabumCrawling.Services.csproj">
+      <Project>{a95cb4e2-5b70-4331-993a-d10928b57e8d}</Project>
+      <Name>KabumCrawling.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
