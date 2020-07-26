@@ -51,12 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\Configuration\DestinarioConfiguration.cs" />
     <Compile Include="Context\Configuration\EntityConfiguration.cs" />
     <Compile Include="Context\Configuration\NotificacaoConfiguration.cs" />
     <Compile Include="Context\ContextoDados.cs" />
     <Compile Include="Interfaces\IEntityConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Repositories\DestinarioRepository.cs" />
     <Compile Include="Repositories\NotificacaoRepository.cs" />
   </ItemGroup>
   <ItemGroup />

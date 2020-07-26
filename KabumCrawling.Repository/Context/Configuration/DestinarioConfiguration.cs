@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KabumCrawling.Repository.Context.Configuration
 {
-    public class NotificacaoConfiguration : EntityConfiguration<NotificacaoProduto>
+    public class DestinarioConfiguration : EntityConfiguration<Destinario>
     {
         protected override void ConfigurateFields()
         {
@@ -16,28 +16,20 @@ namespace KabumCrawling.Repository.Context.Configuration
                 .HasColumnType("INT")
                 .HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
 
-            Property(p => p.NomeProduto)
-                .HasColumnName("NOME_PRODUTO")
+            Property(p => p.Nome)
+                .HasColumnName("NOME")
                 .HasColumnType("VARCHAR")
                 .IsRequired();
 
-            Property(p => p.ValorMinProduto)
-                .HasColumnName("VALOR_MIN")
-                .HasColumnType("decimal")
-                .HasPrecision(14, 2)
-                .IsOptional();
+            Property(p => p.Contato)
+                .HasColumnName("CONTATO")
+                .HasColumnType("VARCHAR")
+                .IsRequired();
 
-            Property(p => p.IdDestinario)
-               .HasColumnName("ID_DESTINARIO")
-               .HasColumnType("int")
-               .IsRequired();
-
-
-            Property(p => p.ValorMaxProduto)
-                .HasColumnName("VALOR_MAX")
-                .HasColumnType("decimal")
-                .HasPrecision(14,2)
-                .IsOptional();
+            Property(p => p.Email)
+                .HasColumnName("EMAIL")
+                .HasColumnType("VARCHAR")
+                .IsRequired();
 
             Property(p => p.DtCadastro)
                 .HasColumnName("DT_CADASTRO")
@@ -46,17 +38,20 @@ namespace KabumCrawling.Repository.Context.Configuration
 
         protected override void ConfigurateFK()
         {
-            
+            HasMany(u => u.Produtos)
+          .WithRequired(u => u.Destinario)
+          .HasForeignKey(u => u.IdDestinario)
+          .WillCascadeOnDelete(false);
         }
 
         protected override void ConfiguratePK()
         {
-            HasKey(a =>a.Id);
+            HasKey(x => x.Id);
         }
 
         protected override void ConfigurateTableName()
         {
-            ToTable("TB_NOTIFICAR_PRODUTO");
+            ToTable("TB_DESTINARIOS");
         }
     }
 }

@@ -41,7 +41,6 @@ namespace KabumCrawling.Repository.Repositories
         {
             return _context.Set<T>().AsParallel();
         }
-
         public virtual IEnumerable<T> Listar(Expression<Func<T, bool>> expression = null)
         {
             var dados = _context.Set<T>().AsQueryable();
@@ -51,7 +50,7 @@ namespace KabumCrawling.Repository.Repositories
 
             return dados;
         }
-        public virtual IEnumerable<T> Listar(Expression<Func<T, bool>> expression = null, Expression<Func<T, dynamic>> order = null, int? count = 0, int? skip = 0, bool reverse = false)
+        public virtual IEnumerable<T> Listar(Expression<Func<T, bool>> expression = null, Expression<Func<T, object>> order = null, int? count = 0, int? skip = 0, bool reverse = false)
         {
             var dados = _context.Set<T>().AsQueryable();
 

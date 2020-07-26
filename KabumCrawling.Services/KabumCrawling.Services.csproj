@@ -63,6 +63,8 @@
     <Compile Include="Crawler\KabumCrawler.cs" />
     <Compile Include="Crawler\PichauCrawler.cs" />
     <Compile Include="Crawler\TerabyteCrawler.cs" />
+    <Compile Include="Data\DestinarioService.cs" />
+    <Compile Include="Data\NotificacaoProdutoService.cs" />
     <Compile Include="Notification\EmailNotification.cs" />
     <Compile Include="Interfaces\INotification.cs" />
     <Compile Include="Notification\NotificationBase.cs" />
@@ -73,6 +75,10 @@
     <ProjectReference Include="..\KabumCrawling.Domain\KabumCrawling.Domain.csproj">
       <Project>{583D365F-4936-4C1F-B3EF-7AC9EA947906}</Project>
       <Name>KabumCrawling.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KabumCrawling.Repository\KabumCrawling.Repository.csproj">
+      <Project>{872F16AC-4C71-4C51-B085-E7ECDA76D8F5}</Project>
+      <Name>KabumCrawling.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

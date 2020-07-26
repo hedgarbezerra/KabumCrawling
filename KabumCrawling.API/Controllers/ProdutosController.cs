@@ -1,12 +1,17 @@
-﻿using KabumCrawling.Domain.Models;
+﻿using KabumCrawling.Domain.DTO;
+using KabumCrawling.Domain.Models;
 using KabumCrawling.Repository.Repositories;
 using KabumCrawling.Services.Crawler;
+using KabumCrawling.Services.Data;
 using KabumCrawling.Services.Notification;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Web.Http;
 
 namespace KabumCrawling.API.Controllers
@@ -16,7 +21,7 @@ namespace KabumCrawling.API.Controllers
     {
         [HttpPost]
         [Route("PesquisarListaProdutos")]
-        public IHttpActionResult ListaProdutos([FromBody] ProdutoPesquisa pesquisa)
+        public IHttpActionResult ListaProdutos([FromBody] DTOProdutoPesquisa pesquisa)
         {
             try
             {
@@ -54,7 +59,7 @@ namespace KabumCrawling.API.Controllers
 
         [HttpPost]
         [Route("PrecosGTX1660")]
-        public IHttpActionResult GTX1660([FromBody] ProdutoPesquisa pesquisa)
+        public IHttpActionResult GTX1660([FromBody] DTOProdutoPesquisa pesquisa)
         {
             try
             {
@@ -91,14 +96,17 @@ namespace KabumCrawling.API.Controllers
         }
 
         [HttpPost]
-        [Route("TesteCadastro")]
-        public IHttpActionResult Cadastro([FromBody] NotificacaoProduto notificacaoProduto)
+        [Route("CadastroDestinario")]
+        public IHttpActionResult CadastroDestinario([FromBody] DTODestinario destinario)
         {
             try
             {
-                NotificacaoRepository repo = new NotificacaoRepository();
-                var objCtx = repo.Inserir(notificacaoProduto);
-                repo.Savechanges();
+                DestinarioService service = new DestinarioService();
+                var objCtx = service.CadastrarDestinario(new Destinario { 
+                    Contato = destinario.Contato,
+                    Email= destinario.Email,
+                    Nome = destinario.Nome
+                });
                 return Ok(objCtx);
             }
             catch (Exception ex)
@@ -106,25 +114,53 @@ namespace KabumCrawling.API.Controllers
                 return InternalServerError(ex);
             }
         }
+
         [HttpGet]
-        [Route("TesteListar")]
-        public IHttpActionResult Listar(string q = "",  int ? qtd_items = null, int? pagina = null)
+        [Route("Produtos")]
+        public IHttpActionResult Produtos([FromUri] string email)
+        {
+            NotificacaoProdutoService service = new NotificacaoProdutoService();
+
+            return Ok(service.ListarNotificacoes(email));
+        }
+
+        [HttpPost]
+        [Route("CadastroNotificacao")]
+        public IHttpActionResult CadastroNotificacao([FromBody] DTONotificacaoProduto notificacao)
         {
             try
             {
-                NotificacaoRepository repo = new NotificacaoRepository();
-                var listaProdutos = repo.Listar(); //repo.Listar(x=> x.NomeDestinario.Contains(q)|| x.NomeProduto.Contains(q), x=> x.DtCadastro, qtd_items, pagina, true);
-                return Ok(new { 
-                    data = listaProdutos,
-                    message = listaProdutos.Count() > 0 ? "Encontramos os seguintes produtos registrados." : "Oops, não encontramos o que procurava."
+                NotificacaoProdutoService service = new NotificacaoProdutoService();
+                var objCtx = service.CadastrarNotificacao(notificacao.EmailDestinario, new NotificacaoProduto
+                {
+                    NomeProduto = notificacao.NomeProduto,
+                    ValorMaxProduto = notificacao.ValorMaxProduto,
+                    ValorMinProduto = notificacao.ValorMinProduto                    
                 });
+                return Ok(objCtx);
             }
             catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
-
         }
 
+        //[HttpPost]
+        //[Route("Email")]
+        //public IHttpActionResult Email([FromBody] DTONotificacaoProduto notificacaoProduto)
+        //{
+        //    try
+        //    {
+        //        NotificacaoRepository repo = new NotificacaoRepository();
+        //        EmailNotification notification = new EmailNotification();
+        //        var ProdutoUsuario = repo.Listar().FirstOrDefault();
+        //        notification.Notificar(new )
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return InternalServerError(ex);
+        //    }
+
+        //}
     }
 }

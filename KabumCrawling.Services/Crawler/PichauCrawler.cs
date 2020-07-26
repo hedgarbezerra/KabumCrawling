@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using KabumCrawling.Domain.DTO;
 using KabumCrawling.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace KabumCrawling.Services.Crawler
 
             return listaProdutosDetalhe;
         }
-        public List<Produto> PesquisarProduto(ProdutoPesquisa valores)
+        public List<Produto> PesquisarProduto(DTOProdutoPesquisa valores)
         {
             string url = $"{_baseUrl}{_baseListaUrl}{CorrigeQueryString(valores.produto)}";
             RetornoRequesicao retornoRequesicao = FazerRequest(url, MetodoRequisicao.GET);
@@ -58,7 +59,7 @@ namespace KabumCrawling.Services.Crawler
                     produtosRetorno.Add(new Produto
                     {
                         Nome = node.SelectNodes("div/div/strong").FirstOrDefault().InnerText.Trim(),
-                        Preco = TratarReal(preco.FirstOrDefault().InnerText.Trim()),
+                        Preco =  preco == null ? 0: TratarReal(preco.FirstOrDefault().InnerText.Trim()),
                         UrlImage = node.Descendants("img").FirstOrDefault().Attributes["src"].Value,
                         UrlProduto = node.Descendants("a").FirstOrDefault().Attributes["href"].Value,
                         Loja = _baseUrl

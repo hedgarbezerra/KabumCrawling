@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KabumCrawling.Domain.Models
+namespace KabumCrawling.Domain.DTO
 {
-    public class Destinario
+    public class DTODestinario
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Contato { get; set; }
-        public DateTime DtCadastro { get; set; }
-        public virtual ICollection<NotificacaoProduto> Produtos { get; set; }
     }
 }

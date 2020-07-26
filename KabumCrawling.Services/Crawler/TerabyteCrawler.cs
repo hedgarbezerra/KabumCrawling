@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using KabumCrawling.Domain.DTO;
 using KabumCrawling.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace KabumCrawling.Services.Crawler
 
             return ListaGTX;
         }
-        public List<Produto> PesquisarProduto(ProdutoPesquisa produtoPesquisa)
+        public List<Produto> PesquisarProduto(DTOProdutoPesquisa produtoPesquisa)
         {
             string url = $"{_baseUrl}{_baseListaUrl}{CorrigeQueryString(produtoPesquisa.produto)}";
 

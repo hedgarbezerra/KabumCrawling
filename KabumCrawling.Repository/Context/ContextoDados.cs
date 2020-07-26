@@ -14,7 +14,9 @@ namespace KabumCrawling.Repository.Context
         protected override void OnModelCreating(DbModelBuilder builder)
         {
             builder.Configurations.Add(new NotificacaoConfiguration());
+            builder.Configurations.Add(new DestinarioConfiguration());
         }
         public virtual DbSet<NotificacaoProduto> NotificacaoProdutos { get; set; }
+        public virtual DbSet<Destinario> Destinarios { get; set; }
     }
 }
