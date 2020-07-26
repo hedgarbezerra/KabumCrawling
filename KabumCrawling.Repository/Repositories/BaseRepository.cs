@@ -13,13 +13,7 @@ namespace KabumCrawling.Repository.Repositories
         where T: class
     {
         protected ContextoDados _context;
-        public BaseRepository(ContextoDados contexto = null)
-        {
-            if (contexto != null)
-                _context = contexto;
-            else
-                _context = new ContextoDados();
-        }
+
         public virtual T Inserir(T obj)
         {
             var objContextual = _context.Set<T>().Add(obj);

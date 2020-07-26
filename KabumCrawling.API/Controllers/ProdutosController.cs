@@ -4,14 +4,10 @@ using KabumCrawling.Repository.Repositories;
 using KabumCrawling.Services.Crawler;
 using KabumCrawling.Services.Data;
 using KabumCrawling.Services.Notification;
-using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
-using System.Net.Http;
-using System.Security.Cryptography;
 using System.Web.Http;
 
 namespace KabumCrawling.API.Controllers
@@ -20,36 +16,24 @@ namespace KabumCrawling.API.Controllers
     public class ProdutosController : ApiController
     {
         [HttpPost]
-        [Route("PesquisarListaProdutos")]
+        [Route("PesquisarPrecosProdutos")]
         public IHttpActionResult ListaProdutos([FromBody] DTOProdutoPesquisa pesquisa)
         {
             try
             {
-                List<Produto> produtos = new List<Produto>();
-                PichauCrawler crawlerPichau = new PichauCrawler();
-                TerabyteCrawler terabyteCrawler = new TerabyteCrawler();
+                CrawlerService crawlerService = new CrawlerService();
+                var produtos = crawlerService.PesquisarProduto(pesquisa);
 
-                produtos.AddRange(crawlerPichau.PesquisarProduto(pesquisa));
-                produtos.AddRange(terabyteCrawler.PesquisarProduto(pesquisa));
+                var retornoApi = new
+               {
+                   data = produtos,
+                   message = produtos.Count > 0 ? $"Encontramos preços do(a) {pesquisa.produto}" : $"Não encontramos preços do(a) {pesquisa.produto}"
+                };
+
                 if (produtos.Count() > 0)
-                {
-                    IQueryable<Produto> produtosConsulta = produtos.AsQueryable();
-
-                    if (pesquisa.valor_produto_max.HasValue && pesquisa.valor_produto_max > 0)
-                        produtosConsulta = produtosConsulta.Where(x => x.Preco <= pesquisa.valor_produto_max);
-
-                    if (pesquisa.valor_produto_min.HasValue && pesquisa.valor_produto_min > 0)
-                        produtosConsulta = produtosConsulta.Where(x => x.Preco >= pesquisa.valor_produto_min);
-
-                    if (pesquisa.qtd_itens.HasValue)
-                        produtosConsulta = produtosConsulta.Take(pesquisa.qtd_itens >= 1 ? (int)pesquisa.qtd_itens : produtosConsulta.Count());
-
-                    produtos = produtosConsulta.OrderBy(p => p.Preco).ToList();
-
-                    return Content(HttpStatusCode.Found, produtos);
-                }
+                    return Content(HttpStatusCode.Found, retornoApi);
                 else
-                    return Content(HttpStatusCode.NoContent, produtos);
+                    return Content(HttpStatusCode.NoContent, retornoApi);
             }
             catch (Exception ex)
             {
@@ -63,106 +47,24 @@ namespace KabumCrawling.API.Controllers
         {
             try
             {
-                PichauCrawler crawlerPichau = new PichauCrawler();
-                TerabyteCrawler crawlerTera = new TerabyteCrawler();
-                List<Produto> produtos = new List<Produto>();
-                produtos.AddRange(crawlerPichau.GetGTX1660List());
-                produtos.AddRange(crawlerTera.GetGTX1660List());
+                CrawlerService crawlerService = new CrawlerService();
+                var produtos = crawlerService.PesquisarGTX1660(pesquisa);
+
+                var retornoApi = new
+                {
+                    data = produtos,
+                    message = produtos.Count > 0 ? "Encontramos preços do(a) GTX 1660" : "Não encontramos preços do(a) 1660"
+                };
 
                 if (produtos.Count() > 0)
-                {
-                    IQueryable<Produto> produtosConsulta = produtos.AsQueryable();
-
-                    if (pesquisa.valor_produto_max.HasValue && pesquisa.valor_produto_max > 0)
-                        produtosConsulta = produtosConsulta.Where(x => x.Preco <= pesquisa.valor_produto_max);
-
-                    if (pesquisa.valor_produto_min.HasValue && pesquisa.valor_produto_min > 0)
-                        produtosConsulta = produtosConsulta.Where(x => x.Preco >= pesquisa.valor_produto_min);
-
-                    if (pesquisa.qtd_itens.HasValue)
-                        produtosConsulta = produtosConsulta.Take(pesquisa.qtd_itens >= 1 ? (int)pesquisa.qtd_itens : produtosConsulta.Count());
-
-                    produtos = produtosConsulta.OrderBy(p => p.Preco).ToList();
-
-                    return Content(HttpStatusCode.Found, produtos);
-                }
+                    return Content(HttpStatusCode.Found, retornoApi);
                 else
-                    return Content(HttpStatusCode.NotFound, produtos);
+                    return Content(HttpStatusCode.NoContent, retornoApi);
             }
             catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
         }
-
-        [HttpPost]
-        [Route("CadastroDestinario")]
-        public IHttpActionResult CadastroDestinario([FromBody] DTODestinario destinario)
-        {
-            try
-            {
-                DestinarioService service = new DestinarioService();
-                var objCtx = service.CadastrarDestinario(new Destinario { 
-                    Contato = destinario.Contato,
-                    Email= destinario.Email,
-                    Nome = destinario.Nome
-                });
-                return Ok(objCtx);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
-
-        [HttpGet]
-        [Route("Produtos")]
-        public IHttpActionResult Produtos([FromUri] string email)
-        {
-            //NotificacaoProdutoService service = new NotificacaoProdutoService();
-            //var x = service.ListarNotificacoes(email);
-            NotificacaoRepository repo = new NotificacaoRepository();
-            var x = repo.ListarNoTracking().ToList();
-            return Ok(x);
-        }
-
-        [HttpPost]
-        [Route("CadastroNotificacao")]
-        public IHttpActionResult CadastroNotificacao([FromBody] DTONotificacaoProduto notificacao)
-        {
-            try
-            {
-                NotificacaoProdutoService service = new NotificacaoProdutoService();
-                var objCtx = service.CadastrarNotificacao(notificacao.EmailDestinario, new NotificacaoProduto
-                {
-                    NomeProduto = notificacao.NomeProduto,
-                    ValorMaxProduto = notificacao.ValorMaxProduto,
-                    ValorMinProduto = notificacao.ValorMinProduto                    
-                });
-                return Ok(objCtx);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
-
-        //[HttpPost]
-        //[Route("Email")]
-        //public IHttpActionResult Email([FromBody] DTONotificacaoProduto notificacaoProduto)
-        //{
-        //    try
-        //    {
-        //        NotificacaoRepository repo = new NotificacaoRepository();
-        //        EmailNotification notification = new EmailNotification();
-        //        var ProdutoUsuario = repo.Listar().FirstOrDefault();
-        //        notification.Notificar(new )
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return InternalServerError(ex);
-        //    }
-
-        //}
     }
 }

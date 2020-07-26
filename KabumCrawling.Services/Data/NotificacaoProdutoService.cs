@@ -1,4 +1,5 @@
-﻿using KabumCrawling.Domain.Models;
+﻿using KabumCrawling.Domain.DTO;
+using KabumCrawling.Domain.Models;
 using KabumCrawling.Repository.Context;
 using KabumCrawling.Repository.Repositories;
 using System;
@@ -31,6 +32,14 @@ namespace KabumCrawling.Services.Data
 
             return obj;
         }
+        public void RemoverNotificacao(DTONotificacaoProduto notificacao)
+        {
+            //var destinario = _destinarioRepo.Listar().ToList().Where(x => x.Email.Contains(emailDestinario)).FirstOrDefault();
+            NotificacaoProduto notificacaoAchada = _repo.EncontrarPorId((int)notificacao.Id) ?? _repo.Listar().Where(x => x.Destinario.Email == notificacao.EmailDestinario).FirstOrDefault();
+            _repo.Remover(notificacaoAchada);
+            _repo.Savechanges();
+
+        }
 
         public List<NotificacaoProduto> ListarNotificacoes()
         {
@@ -39,6 +48,10 @@ namespace KabumCrawling.Services.Data
         public List<NotificacaoProduto> ListarNotificacoes(string emailDestinario = "")
         {
             return _repo.Listar(x => x.Destinario.Email.Contains(emailDestinario)).ToList();
+        }
+        public List<NotificacaoProduto> ListarNotificacoesNoTracking(string emailDestinario = "")
+        {
+            return _repo.ListarNoTracking().Where(x => x.Destinario.Email.Contains(emailDestinario)).ToList();
         }
     }
 }

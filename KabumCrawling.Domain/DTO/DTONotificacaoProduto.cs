@@ -9,6 +9,7 @@ namespace KabumCrawling.Domain.DTO
 {
     public class DTONotificacaoProduto
     {
+        public int? Id { get; set; }
         public string EmailDestinario { get; set; }
         public string NomeProduto { get; set; }
         public decimal ValorMinProduto { get; set; }

@@ -28,6 +28,10 @@ namespace KabumCrawling.Services.Data
         {
             return _repo.EncontrarPorId(id);
         }
+        public Destinario GetDestinarioNoTracking(int id)
+        {
+            return _repo.GetDestinario(id);
+        }
         public Destinario CadastrarDestinario(Destinario destinario)
         {
             var obj = _repo.Inserir(destinario);

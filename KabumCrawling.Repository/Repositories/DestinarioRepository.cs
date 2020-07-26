@@ -24,5 +24,9 @@ namespace KabumCrawling.Repository.Repositories
 
             return objContextual;
         }
+        public Destinario GetDestinario(int id)
+        {
+            return _context.Destinarios.AsNoTracking().FirstOrDefault(x=> x.Id == id);
+        }
     }
 }

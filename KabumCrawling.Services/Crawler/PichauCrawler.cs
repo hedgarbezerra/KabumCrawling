@@ -40,7 +40,6 @@ namespace KabumCrawling.Services.Crawler
             List<Produto> listaProdutosDetalhe = new List<Produto>();
             listaProdutosDetalhe.AddRange(HtmlNodeToProductList(listaProdutos));
 
-
             return listaProdutosDetalhe;
         }
 

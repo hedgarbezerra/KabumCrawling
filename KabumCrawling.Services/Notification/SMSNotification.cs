@@ -14,7 +14,7 @@ namespace KabumCrawling.Services.Notification
             throw new NotImplementedException();
         }
 
-        public override void Notificar(List<Produto> produtos, List<Destinario> destinario)
+        public override void Notificar(List<Destinario> destinario)
         {
             throw new NotImplementedException();
         }

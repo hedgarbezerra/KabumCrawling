@@ -36,7 +36,7 @@ namespace KabumCrawling.Services.Notification
 			}
         }
 
-        public override void Notificar(List<Produto> produtos, List<Destinario> destinario)
+        public override void Notificar(List<Destinario> destinario)
         {
 			var message = new MimeMessage();
 			message.From.Add(new MailboxAddress("Hedgar Bezerra", _email));			

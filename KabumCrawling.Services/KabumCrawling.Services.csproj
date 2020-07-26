@@ -63,6 +63,7 @@
     <Compile Include="Crawler\KabumCrawler.cs" />
     <Compile Include="Crawler\PichauCrawler.cs" />
     <Compile Include="Crawler\TerabyteCrawler.cs" />
+    <Compile Include="Data\CrawlerService.cs" />
     <Compile Include="Data\DestinarioService.cs" />
     <Compile Include="Data\NotificacaoProdutoService.cs" />
     <Compile Include="Notification\EmailNotification.cs" />

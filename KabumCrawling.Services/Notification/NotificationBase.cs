@@ -14,11 +14,9 @@ namespace KabumCrawling.Services.Notification
         protected int _smtpPort = Convert.ToInt32(ConfigurationManager.AppSettings["smtpPort"]);
         protected string _email = ConfigurationManager.AppSettings["email"];
         protected string _emailPassword = ConfigurationManager.AppSettings["senhaEmail"];
-        protected string _htmlBase = @"
-            ";
         
         public abstract void Notificar(List<Produto> produtos, Destinario destinario);
 
-        public abstract void Notificar(List<Produto> produtos, List<Destinario> destinario);
+        public abstract void Notificar(List<Destinario> destinario);
     }
 }
