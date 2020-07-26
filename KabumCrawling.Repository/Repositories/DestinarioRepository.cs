@@ -1,4 +1,5 @@
 ﻿using KabumCrawling.Domain.Models;
+using KabumCrawling.Repository.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace KabumCrawling.Repository.Repositories
 {
     public class DestinarioRepository : BaseRepository<Destinario>
     {
+        public DestinarioRepository(ContextoDados contexto = null)
+        {
+            if (contexto != null)
+                _context = contexto;
+            else
+                _context = new ContextoDados();
+        }
         public override Destinario Inserir(Destinario obj)
         {
             obj.DtCadastro = DateTime.Now;

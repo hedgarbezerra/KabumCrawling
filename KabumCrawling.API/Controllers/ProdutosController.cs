@@ -119,9 +119,11 @@ namespace KabumCrawling.API.Controllers
         [Route("Produtos")]
         public IHttpActionResult Produtos([FromUri] string email)
         {
-            NotificacaoProdutoService service = new NotificacaoProdutoService();
-
-            return Ok(service.ListarNotificacoes(email));
+            //NotificacaoProdutoService service = new NotificacaoProdutoService();
+            //var x = service.ListarNotificacoes(email);
+            NotificacaoRepository repo = new NotificacaoRepository();
+            var x = repo.ListarNoTracking().ToList();
+            return Ok(x);
         }
 
         [HttpPost]

@@ -1,4 +1,5 @@
 ﻿using KabumCrawling.Domain.Models;
+using KabumCrawling.Repository.Context;
 using KabumCrawling.Repository.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,18 @@ namespace KabumCrawling.Services.Data
 {
     public class NotificacaoProdutoService
     {
-        private DestinarioService _destinarioService;
+        private DestinarioRepository _destinarioRepo;
         private NotificacaoRepository _repo;
         public NotificacaoProdutoService()
         {
-            this._destinarioService = new DestinarioService();
-            this._repo = new NotificacaoRepository();
+            ContextoDados context = new ContextoDados();
+            this._destinarioRepo = new DestinarioRepository(context);
+            _repo = new NotificacaoRepository(context);
         }
         public NotificacaoProduto CadastrarNotificacao(string emailDestinario, NotificacaoProduto notificacao)
         {
-            var destinario = _destinarioService.GetDestinario(emailDestinario);
+
+            var destinario = _destinarioRepo.Listar().ToList().Where(x=>x.Email.Contains(emailDestinario)).FirstOrDefault();
             notificacao.Destinario = destinario;
             notificacao.IdDestinario = destinario.Id;
 

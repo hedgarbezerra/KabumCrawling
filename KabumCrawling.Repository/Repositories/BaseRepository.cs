@@ -13,9 +13,12 @@ namespace KabumCrawling.Repository.Repositories
         where T: class
     {
         protected ContextoDados _context;
-        public BaseRepository()
+        public BaseRepository(ContextoDados contexto = null)
         {
-            _context = new ContextoDados();
+            if (contexto != null)
+                _context = contexto;
+            else
+                _context = new ContextoDados();
         }
         public virtual T Inserir(T obj)
         {
@@ -41,6 +44,10 @@ namespace KabumCrawling.Repository.Repositories
         {
             return _context.Set<T>().AsParallel();
         }
+        public virtual IEnumerable<T> ListarNoTracking()
+        {
+            return _context.Set<T>().AsNoTracking().AsParallel();
+        }
         public virtual IEnumerable<T> Listar(Expression<Func<T, bool>> expression = null)
         {
             var dados = _context.Set<T>().AsQueryable();
@@ -65,6 +72,7 @@ namespace KabumCrawling.Repository.Repositories
 
             return dados.AsEnumerable();
         }
+
         public void Savechanges()
         {
             this._context.SaveChanges();
