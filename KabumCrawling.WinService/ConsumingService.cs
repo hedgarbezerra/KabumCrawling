@@ -23,15 +23,16 @@ namespace KabumCrawling.WinService
 
             foreach (var destinario in destinarios)
             {
-                List<List<Produto>> listaProdutos = new List<List<Produto>>();
+
+                List<Produto> listaProdutos = new List<Produto>();
 
                 foreach (var produtos in destinario.Produtos)
                 {
-                    var listaProdutosIteracao = crawler.PesquisarProduto(new DTOProdutoPesquisa { produto = produtos.NomeProduto, valor_produto_min = produtos.ValorMinProduto, valor_produto_max = produtos.ValorMaxProduto });
-                    listaProdutos.Add(listaProdutosIteracao);
+                    var listaProdutosIteracao = crawler.PesquisarProduto(new DTOProdutoPesquisa { produto = produtos.NomeProduto, valor_produto_min = produtos.ValorMinProduto, valor_produto_max = produtos.ValorMaxProduto }).Take(4).ToList();
+                    listaProdutosIteracao.ForEach(x => listaProdutos.Add(x));
                 }
 
-                listaProdutos.ForEach(x => notification.Notificar(x, destinario));
+               notification.Notificar(listaProdutos, destinario);
             }
 
         }

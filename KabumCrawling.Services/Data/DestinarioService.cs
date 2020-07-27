@@ -34,6 +34,9 @@ namespace KabumCrawling.Services.Data
         }
         public Destinario CadastrarDestinario(Destinario destinario)
         {
+            var objExistente = _repo.Listar(x => x.Email == destinario.Email).FirstOrDefault();
+            if (objExistente != null)
+                throw new Exception("Já existe um usuário com este e-mail.");
             var obj = _repo.Inserir(destinario);
 
             _repo.Savechanges();

@@ -20,8 +20,8 @@ namespace KabumCrawling.WinService
         protected override void OnStart(string[] args)
         {
             var schedule = new Schedule(
-                   () => ConsumingService.EnviarEmailPrecos()
-               );
+                   () => Console.WriteLine("aaaaa")//ConsumingService.EnviarEmailPrecos()
+               ); ;
 
             schedule.ToRunEvery(5).Minutes();
         }

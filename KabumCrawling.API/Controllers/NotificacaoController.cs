@@ -3,8 +3,10 @@ using KabumCrawling.Domain.Models;
 using KabumCrawling.Repository.Repositories;
 using KabumCrawling.Services.Data;
 using KabumCrawling.Services.Notification;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 
 namespace KabumCrawling.API.Controllers
@@ -15,7 +17,7 @@ namespace KabumCrawling.API.Controllers
 
         [HttpGet]
         [Route("ListarNotificacoesPorEmail")]
-        public IHttpActionResult Produtos([FromUri] string email)
+        public IHttpActionResult NotificacoesEmail([FromUri] string email)
         {
             NotificacaoProdutoService service = new NotificacaoProdutoService();
             var listaProdutos = service.ListarNotificacoes(email);
@@ -25,7 +27,18 @@ namespace KabumCrawling.API.Controllers
                 message = "Lista de produtos cadastrados para este e-mail encontrada com sucesso."
             });
         }
-
+        [HttpGet]
+        [Route("ListarNotificacoes")]
+        public IHttpActionResult Notificacoes()
+        {
+            NotificacaoProdutoService service = new NotificacaoProdutoService();
+            var listaProdutos = service.ListarNotificacoes();
+            return Ok(new
+            {
+                data = listaProdutos,
+                message = "Lista de produtos encontrada com sucesso."
+            });
+        }
         [HttpPost]
         [Route("CadastroNotificacao")]
         public IHttpActionResult CadastroNotificacao([FromBody] DTONotificacaoProduto notificacao)
@@ -52,7 +65,7 @@ namespace KabumCrawling.API.Controllers
         }
 
         [HttpPost]
-        [Route("RemoveroNotificacao")]
+        [Route("RemoverNotificacao")]
         public IHttpActionResult RemoverNotificacao([FromBody] DTONotificacaoProduto notificacao)
         {
             try
@@ -81,17 +94,18 @@ namespace KabumCrawling.API.Controllers
                 DestinarioService destinarioService = new DestinarioService();
                 CrawlerService crawler = new CrawlerService();
 
-                var produtosParaNotificar = notifyServ.ListarNotificacoesNoTracking(notificacaoProduto.EmailDestinario);
+                var produtosParaNotificar = notifyServ.ListarNotificacoes(notificacaoProduto.EmailDestinario);
                 var destinario = destinarioService.GetDestinario(notificacaoProduto.EmailDestinario);
-                List<List<Produto>> listaProdutos = new List<List<Produto>>();
+
+                List<Produto> listaProdutos = new List<Produto>();
 
                 foreach (var produtos in produtosParaNotificar)
                 {
-                    var listaProdutosIteracao = crawler.PesquisarProduto(new DTOProdutoPesquisa { produto = produtos.NomeProduto, valor_produto_min = produtos.ValorMinProduto, valor_produto_max = produtos.ValorMaxProduto });
-                    listaProdutos.Add(listaProdutosIteracao);
+                    var listaProdutosIteracao = crawler.PesquisarProduto(new DTOProdutoPesquisa { produto = produtos.NomeProduto, valor_produto_min = produtos.ValorMinProduto, valor_produto_max = produtos.ValorMaxProduto }).Take(4);
+                    listaProdutosIteracao.ForEach(x =>listaProdutos.Add(x));
                 }
 
-                listaProdutos.ForEach(x => notification.Notificar(x, destinario));
+                notification.Notificar(listaProdutos, destinario);
                 return Ok(new { 
                     message = "E-mail enviado com sucesso."
                 });

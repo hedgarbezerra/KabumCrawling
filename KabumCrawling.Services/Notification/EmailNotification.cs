@@ -151,7 +151,9 @@ namespace KabumCrawling.Services.Notification
                                    
 
             foreach (var produto in produtos)
-            {
+            {                
+                var url = produto.Loja.ToLower().Contains("terabyte") ? produto.Loja + produto.UrlProduto : produto.UrlProduto;
+
                 htmlEmail += $@"
               <div class='layout two-col stack' style='Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;'>
                   <div class='layout__inner' style='border-collapse: collapse;display: table;width: 100%;'>
@@ -185,14 +187,19 @@ namespace KabumCrawling.Services.Notification
                           </div>
                           <div style='Margin-left: 20px;Margin-right: 20px;'>
                               <div style='mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;'>
-                                  <p class='size-18' style='Margin-top: 0;Margin-bottom: 20px;font-size: 17px;line-height: 26px;' lang='x-size-18'><span style='color:#ff0000'>R$ {produto.Preco}</span></p>
+                                  <p class='size-18' style='Margin-top: 0;Margin-bottom: 5px;font-size: 17px;line-height: 26px;' lang='x-size-18'><span style='color:#ff0000'>R$ {produto.Preco}</span></p>
+                              </div>
+                          </div>
+                        <div style='Margin-left: 20px;Margin-right: 20px;'>
+                              <div style='mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;'>
+                                  <a class='size-18' style='Margin-top: 0;Margin-bottom: 5px;font-size: 14px;line-height: 26px;' lang='x-size-18' href='{produto.Loja}'>{ produto.Loja }</a>
                               </div>
                           </div>
                           <div style='Margin-left: 20px;Margin-right: 20px;'>
                               <div class='btn btn--shadow btn--small' style='text-align:right;'>
                                   <![if !mso]>
-                                  <a style='border-radius: 0;display: inline-block;font-size: 11px;font-weight: bold;line-height: 19px;padding: 6px 12px 7px 12px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff !important;box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);background-color: #814fff;font-family: Crete Round, PT Serif, Constantia, Georgia, serif;' href='{produto.UrlProduto}'>Acessar</a><![endif]>
-                                  <!--[if mso]><p style='line-height:0;margin:0;'>&nbsp;</p><v:rect xmlns:v='urn:schemas-microsoft-com:vml' href='{produto.UrlProduto}' style='width:73px' fillcolor='#814FFF' stroke='f'><v:shadow on='t' color='#673FCC' offset='0,2px'></v:shadow><v:textbox style='mso-fit-shape-to-text:t' inset='0px,6px,0px,5px'><center style='font-size:11px;line-height:19px;color:#FFFFFF;font-family:Crete Round,PT Serif,Constantia,Georgia,serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:3px'>Book Now</center></v:textbox></v:rect><![endif]-->
+                                  <a style='border-radius: 0;display: inline-block;font-size: 11px;font-weight: bold;line-height: 19px;padding: 6px 12px 7px 12px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff !important;box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);background-color: #814fff;font-family: Crete Round, PT Serif, Constantia, Georgia, serif;' href='{ url }'>Acessar</a><![endif]>
+                                  <!--[if mso]><p style='line-height:0;margin:0;'>&nbsp;</p><v:rect xmlns:v='urn:schemas-microsoft-com:vml' href='{ url }' style='width:73px' fillcolor='#814FFF' stroke='f'><v:shadow on='t' color='#673FCC' offset='0,2px'></v:shadow><v:textbox style='mso-fit-shape-to-text:t' inset='0px,6px,0px,5px'><center style='font-size:11px;line-height:19px;color:#FFFFFF;font-family:Crete Round,PT Serif,Constantia,Georgia,serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:3px'>Acessar</center></v:textbox></v:rect><![endif]-->
                               </div>
                           </div>
 

@@ -23,7 +23,7 @@ namespace KabumCrawling.Services.Data
         public NotificacaoProduto CadastrarNotificacao(string emailDestinario, NotificacaoProduto notificacao)
         {
 
-            var destinario = _destinarioRepo.Listar().ToList().Where(x=>x.Email.Contains(emailDestinario)).FirstOrDefault();
+            var destinario = _destinarioRepo.Listar(x => x.Email.Contains(emailDestinario)).ToList().FirstOrDefault();
             notificacao.Destinario = destinario;
             notificacao.IdDestinario = destinario.Id;
 
@@ -35,7 +35,7 @@ namespace KabumCrawling.Services.Data
         public void RemoverNotificacao(DTONotificacaoProduto notificacao)
         {
             //var destinario = _destinarioRepo.Listar().ToList().Where(x => x.Email.Contains(emailDestinario)).FirstOrDefault();
-            NotificacaoProduto notificacaoAchada = _repo.EncontrarPorId((int)notificacao.Id) ?? _repo.Listar().Where(x => x.Destinario.Email == notificacao.EmailDestinario).FirstOrDefault();
+            NotificacaoProduto notificacaoAchada = notificacao.Id.HasValue ? _repo.EncontrarPorId((int)notificacao.Id) : _repo.Listar(x => x.Destinario.Email == notificacao.EmailDestinario && x.NomeProduto.ToLower().Contains(notificacao.NomeProduto)).FirstOrDefault();
             _repo.Remover(notificacaoAchada);
             _repo.Savechanges();
 

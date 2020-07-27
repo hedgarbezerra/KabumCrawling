@@ -15,6 +15,7 @@ namespace KabumCrawling.Domain.Models
         public decimal ValorMinProduto { get; set; }
         public decimal ValorMaxProduto { get; set; }
         public DateTime DtCadastro { get; set; }
+        [JsonIgnore]
         public int IdDestinario { get; set; }
         [JsonIgnore]
         public virtual Destinario Destinario { get; set; }
